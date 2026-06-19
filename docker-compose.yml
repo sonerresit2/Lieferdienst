@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: lieferdienst_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lieferdienst
+      POSTGRES_PASSWORD: lieferdienst
+      POSTGRES_DB: lieferdienst
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lieferdienst -d lieferdienst"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: lieferdienst_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://lieferdienst:lieferdienst@db:5432/lieferdienst
+      SECRET_KEY: change-me-in-production
+    ports:
+      - "8000:8000"
+    volumes:
+      # Bind-Mount fuers Backend-Team: Code-Aenderungen wirken sofort, ohne neu zu bauen
+      - ./backend/app:/app/app
+      # Hochgeladene Produktbilder bleiben erhalten, auch wenn der Container neu gebaut wird
+      - product_images:/app/app/static/product_images
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Platzhalter fuer das Frontend-Team (Gerhard, Thomas).
+  # Sobald das Frontend-Repo/-Dockerfile steht, hier "build" auf den
+  # entsprechenden Pfad zeigen lassen oder per "image:" einbinden.
+  # Bis dahin auskommentiert, damit "docker compose up" auch ohne
+  # Frontend-Code funktioniert.
+  #
+  # frontend:
+  #   build: ./frontend
+  #   container_name: lieferdienst_frontend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5173:5173"
+  #   environment:
+  #     VITE_API_URL: http://localhost:8000
+  #   depends_on:
+  #     - backend
+
+volumes:
+  db_data:
+  product_images:
