@@ -1,0 +1,113 @@
+/* ── Hero ─────────────────────────────────────── */
+.hero {
+  padding: 64px 0 48px;
+}
+
+.heroEyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 10px;
+}
+
+.heroTitle {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  color: var(--c-ink);
+  margin-bottom: 14px;
+}
+
+.heroSub {
+  font-size: 1.05rem;
+  color: var(--c-ink-2);
+  max-width: 46ch;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
+}
+
+/* ── Anbieter ─────────────────────────────────── */
+.vendorScroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 36px;
+  scrollbar-width: none;
+}
+.vendorScroll::-webkit-scrollbar { display: none; }
+
+.vendorChip {
+  flex: 0 0 auto;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  background: var(--c-surface);
+  color: var(--c-ink-2);
+  border: 1.5px solid var(--c-line);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+
+.vendorChip:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+.vendorChipActive {
+  background: var(--c-accent);
+  color: #fff;
+  border-color: var(--c-accent);
+}
+
+/* ── Kategorie-Reiter ─────────────────────────── */
+.catRow {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--c-line);
+  margin-bottom: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.catRow::-webkit-scrollbar { display: none; }
+
+.catTab {
+  padding: 10px 0;
+  margin-right: 28px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+  letter-spacing: -0.01em;
+}
+
+.catTab:hover { color: var(--c-ink); }
+.catTabActive { color: var(--c-ink); border-bottom-color: var(--c-ink); font-weight: 600; }
+
+/* ── Produktraster ────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--c-ink-2);
+  padding: 80px 20px;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 40px 0 32px; }
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}

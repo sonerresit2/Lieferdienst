@@ -29,29 +29,30 @@ services:
     volumes:
       # Bind-Mount fuers Backend-Team: Code-Aenderungen wirken sofort, ohne neu zu bauen
       - ./backend/app:/app/app
+      - ./backend/seed.py:/app/seed.py
       # Hochgeladene Produktbilder bleiben erhalten, auch wenn der Container neu gebaut wird
       - product_images:/app/app/static/product_images
     depends_on:
       db:
         condition: service_healthy
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  # Platzhalter fuer das Frontend-Team (Gerhard, Thomas).
-  # Sobald das Frontend-Repo/-Dockerfile steht, hier "build" auf den
-  # entsprechenden Pfad zeigen lassen oder per "image:" einbinden.
-  # Bis dahin auskommentiert, damit "docker compose up" auch ohne
-  # Frontend-Code funktioniert.
-  #
-  # frontend:
-  #   build: ./frontend
-  #   container_name: lieferdienst_frontend
-  #   restart: unless-stopped
-  #   ports:
-  #     - "5173:5173"
-  #   environment:
-  #     VITE_API_URL: http://localhost:8000
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # NEXT_PUBLIC_API_URL zeigt immer auf localhost, weil der Browser
+        # ausserhalb des Docker-Netzwerks laeuft und "backend" dort nicht
+        # aufgeloest werden kann.
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    container_name: lieferdienst_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # API_URL_INTERNAL wird fuer Server-seitige Requests genutzt (im Docker-Netz).
+      API_URL_INTERNAL: http://backend:8000
+    depends_on:
+      - backend
 
 volumes:
   db_data:
