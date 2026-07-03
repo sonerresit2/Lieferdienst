@@ -1,0 +1,82 @@
+.wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 64px 0 80px;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--c-ink);
+  margin: 0 0 8px;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: var(--c-ink-2);
+  margin: 0 0 48px;
+}
+
+.section {
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-ink-2);
+  margin: 0 0 14px;
+}
+
+.section p {
+  font-size: 0.96rem;
+  color: var(--c-ink);
+  line-height: 1.6;
+  margin: 0 0 4px;
+}
+
+.section a {
+  color: var(--c-accent);
+}
+
+.section a:hover {
+  text-decoration: underline;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table td {
+  padding: 6px 0;
+  font-size: 0.96rem;
+  color: var(--c-ink);
+  vertical-align: top;
+}
+
+.label {
+  color: var(--c-ink-2);
+  width: 120px;
+}
+
+.text {
+  color: var(--c-ink-2) !important;
+  font-size: 0.88rem !important;
+  line-height: 1.7 !important;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 40px 0 60px;
+  }
+}
