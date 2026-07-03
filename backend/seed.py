@@ -1,75 +1,146 @@
 """
-seed.py — Legt Testdaten in der Datenbank an, falls noch keine vorhanden sind.
-Produkte werden bewusst OHNE Bild angelegt — Bilder werden über den
-Endpunkt POST /products/{id}/images hochgeladen (siehe README, Abschnitt
-"Bilder hinzufügen").
+seed.py — Legt Testdaten an falls DB leer ist.
+Weist beim Start automatisch Bilder aus product_images/ den Produkten zu,
+basierend auf Dateinamen-Übereinstimmung mit Produktnamen.
 """
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.core.database import SessionLocal, engine, Base
 from app.core.security import hash_password
-from app.models import User, Vendor, Product
+from app.models import User, Vendor, Product, ProductImage
 
 Base.metadata.create_all(bind=engine)
 db = SessionLocal()
 
-try:
-    if db.query(User).count() > 0:
-        print("Datenbank bereits befüllt, Seed wird übersprungen.")
-        sys.exit(0)
+# Ordner wo Bilder liegen (im Container)
+IMAGE_DIR = "app/static/product_images"
 
-    print("Seed-Daten werden angelegt...")
+def assign_images():
+    """
+    Weist vorhandene Bilder aus product_images/ den Produkten zu.
+    Matching: Dateiname wird mit Produktnamen verglichen (case-insensitiv,
+    Leerzeichen/Sonderzeichen werden ignoriert).
+    Wird bei jedem Start aufgerufen, nicht nur beim ersten Seed.
+    """
+    if not os.path.exists(IMAGE_DIR):
+        print("Kein product_images-Ordner gefunden, überspringe Bildzuordnung.")
+        return
 
-    # ===== User =====
-    users = [
-        User(email="tom@lieferdienst.de",   password_hash=hash_password("passwort123"), full_name="Tom Mustermann", role="customer"),
-        User(email="soner@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Soner Yilmaz",   role="customer"),
-    ]
-    db.add_all(users)
-    db.flush()
-
-    # ===== Anbieter =====
-    china = Vendor(name="China-Fan Imbiss",  description="Authentische asiatische Küche — schnell, frisch, lecker.", delivery_fee="1.99", delivery_time_min=11, rating="4.7")
-    poke  = Vendor(name="Dai Poke Bowls",    description="Frische Poke Bowls mit saisonalen Zutaten.",               delivery_fee="2.49", delivery_time_min=16, rating="4.5")
-    db.add_all([china, poke])
-    db.flush()
-
-    # ===== Produkte China-Fan Imbiss =====
-    china_items = [
-        ("Gebratene Nudeln",       "Wok-gebratene Nudeln mit Hühnchen, Ei und frischem Gemüse.",           "8.90",  "Hauptgericht"),
-        ("Kung Pao Chicken",       "Gebratenes Hühnchen mit Erdnüssen und Chili in würziger Sauce.",        "10.50", "Hauptgericht"),
-        ("Frühlingrollen (4 Stk)", "Knusprige Frühlingsrollen, vegetarisch, mit Sweet-Chili-Dip.",          "4.50",  "Vorspeise"),
-        ("Wan-Tan-Suppe",          "Klare Brühe mit gefüllten Wan-Tan-Teigtaschen und Frühlingszwiebeln.",  "5.90",  "Vorspeise"),
-        ("Mango-Eistee",           "Hausgemachter Eistee mit frischer Mango, kalt serviert.",               "2.90",  "Getränk"),
+    image_files = [
+        f for f in os.listdir(IMAGE_DIR)
+        if f.lower().endswith((".jpg", ".jpeg", ".png", ".webp"))
     ]
 
-    # ===== Produkte Dai Poke Bowls =====
-    poke_items = [
-        ("Spicy Tuna Bowl",        "Sushireis, roher Thunfisch, Avocado, Edamame, Sriracha-Mayo.",   "11.90", "Bowl"),
-        ("Chicken Teriyaki Bowl",  "Basmati-Reis, gegrilltes Hühnchen, Brokkoli, Teriyaki-Glasur.",   "10.90", "Bowl"),
-        ("Veggie Rainbow Bowl",    "Quinoa, geröstete Kichererbsen, Paprika, Gurke, Tahini-Dressing.", "9.90",  "Bowl"),
-        ("Miso-Suppe",             "Traditionelle japanische Miso-Suppe mit Tofu und Wakame.",         "3.50",  "Beilage"),
-        ("Matcha Latte",           "Cremiger Matcha Latte mit Hafermilch, kalt oder warm.",            "3.90",  "Getränk"),
-    ]
+    if not image_files:
+        print("Keine Bilder im product_images-Ordner gefunden.")
+        return
 
-    for name, desc, price, cat in china_items:
-        db.add(Product(vendor_id=china.id, name=name, description=desc, price=price, category=cat, is_available=True))
+    products = db.query(Product).all()
+    assigned = 0
 
-    for name, desc, price, cat in poke_items:
-        db.add(Product(vendor_id=poke.id, name=name, description=desc, price=price, category=cat, is_available=True))
+    for image_file in image_files:
+        # Dateiname ohne Endung, normalisiert für Vergleich
+        image_name = os.path.splitext(image_file)[0].lower()
+        image_name_clean = "".join(c for c in image_name if c.isalnum())
+
+        best_match = None
+        best_score = 0
+
+        for product in products:
+            product_name_clean = "".join(
+                c for c in product.name.lower() if c.isalnum()
+            )
+            # Einfaches Matching: wie viele Zeichen übereinstimmen
+            common = sum(1 for c in image_name_clean if c in product_name_clean)
+            score = common / max(len(image_name_clean), len(product_name_clean), 1)
+
+            if score > best_score and score > 0.4:
+                best_score = score
+                best_match = product
+
+        if best_match:
+            # Prüfen ob Bild schon zugewiesen ist
+            existing = db.query(ProductImage).filter(
+                ProductImage.product_id == best_match.id,
+                ProductImage.image_path.contains(image_file)
+            ).first()
+
+            if not existing:
+                # Alle bisherigen primary-Bilder des Produkts zurücksetzen
+                db.query(ProductImage).filter(
+                    ProductImage.product_id == best_match.id
+                ).update({"is_primary": False})
+
+                db.add(ProductImage(
+                    product_id=best_match.id,
+                    image_path=f"/static/product_images/{image_file}",
+                    is_primary=True,
+                ))
+                assigned += 1
+                print(f"  ✓ '{image_file}' → '{best_match.name}'")
+        else:
+            print(f"  ? '{image_file}' → kein passendes Produkt gefunden")
 
     db.commit()
+    print(f"Bildzuordnung abgeschlossen: {assigned} neu zugewiesen.")
 
-    print(f"✓ {len(users)} User angelegt")
-    print(f"✓ 2 Anbieter angelegt")
-    print(f"✓ {len(china_items) + len(poke_items)} Produkte angelegt (noch ohne Bilder)")
-    print()
-    print("Login-Daten:")
-    for u in users:
-        print(f"  {u.email}  /  passwort123")
-    print()
-    print("Bilder hochladen: http://localhost:8000/docs -> POST /products/{id}/images")
+
+try:
+    # ===== Seed (nur wenn DB leer) =====
+    if db.query(User).count() > 0:
+        print("Datenbank bereits befüllt, Seed wird übersprungen.")
+    else:
+        print("Seed-Daten werden angelegt...")
+
+        users = [
+            User(email="tom@lieferdienst.de",   password_hash=hash_password("passwort123"), full_name="Tom Mustermann", role="customer"),
+            User(email="soner@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Soner Yilmaz",   role="customer"),
+        ]
+        db.add_all(users)
+        db.flush()
+
+        china = Vendor(name="China-Fan Imbiss",  description="Authentische asiatische Küche — schnell, frisch, lecker.", delivery_fee="1.99", delivery_time_min=11, rating="4.7")
+        poke  = Vendor(name="Dai Poke Bowls",    description="Frische Poke Bowls mit saisonalen Zutaten.",               delivery_fee="2.49", delivery_time_min=16, rating="4.5")
+        db.add_all([china, poke])
+        db.flush()
+
+        china_items = [
+            ("Gebratene Nudeln",       "Wok-gebratene Nudeln mit Hühnchen, Ei und frischem Gemüse.",           "8.90",  "Hauptgericht"),
+            ("Kung Pao Chicken",       "Gebratenes Hühnchen mit Erdnüssen und Chili in würziger Sauce.",        "10.50", "Hauptgericht"),
+            ("Frühlingrollen (4 Stk)", "Knusprige Frühlingsrollen, vegetarisch, mit Sweet-Chili-Dip.",          "4.50",  "Vorspeise"),
+            ("Wan-Tan-Suppe",          "Klare Brühe mit gefüllten Wan-Tan-Teigtaschen und Frühlingszwiebeln.",  "5.90",  "Vorspeise"),
+            ("Mango-Eistee",           "Hausgemachter Eistee mit frischer Mango, kalt serviert.",               "2.90",  "Getränk"),
+        ]
+
+        poke_items = [
+            ("Spicy Tuna Bowl",        "Sushireis, roher Thunfisch, Avocado, Edamame, Sriracha-Mayo.",   "11.90", "Bowl"),
+            ("Chicken Teriyaki Bowl",  "Basmati-Reis, gegrilltes Hühnchen, Brokkoli, Teriyaki-Glasur.",   "10.90", "Bowl"),
+            ("Veggie Rainbow Bowl",    "Quinoa, geröstete Kichererbsen, Paprika, Gurke, Tahini-Dressing.", "9.90",  "Bowl"),
+            ("Miso-Suppe",             "Traditionelle japanische Miso-Suppe mit Tofu und Wakame.",         "3.50",  "Beilage"),
+            ("Matcha Latte",           "Cremiger Matcha Latte mit Hafermilch, kalt oder warm.",            "3.90",  "Getränk"),
+        ]
+
+        for name, desc, price, cat in china_items:
+            db.add(Product(vendor_id=china.id, name=name, description=desc, price=price, category=cat, is_available=True))
+
+        for name, desc, price, cat in poke_items:
+            db.add(Product(vendor_id=poke.id, name=name, description=desc, price=price, category=cat, is_available=True))
+
+        db.commit()
+
+        print(f"✓ {len(users)} User angelegt")
+        print(f"✓ 2 Anbieter angelegt")
+        print(f"✓ {len(china_items) + len(poke_items)} Produkte angelegt")
+        print()
+        print("Login-Daten:")
+        for u in users:
+            print(f"  {u.email}  /  passwort123")
+        print()
+
+    # ===== Bilder immer zuweisen (auch bei existierender DB) =====
+    print("Starte Bildzuordnung...")
+    assign_images()
 
 except Exception as e:
     db.rollback()
