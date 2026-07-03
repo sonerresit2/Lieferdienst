@@ -17,6 +17,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 COPY seed.py .
 COPY entrypoint.sh .
+
+# Windows fügt beim Kopieren oft CRLF-Zeilenenden ein, die ein Linux-Container
+# nicht als gültiges Shebang (#!/bin/sh) erkennt ("no such file or directory").
+# sed entfernt das Carriage-Return-Zeichen \r, unabhängig vom Host-System.
 RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 
 EXPOSE 8000

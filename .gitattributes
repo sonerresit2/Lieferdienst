@@ -1,0 +1,4 @@
+# Erzwingt LF (Unix-Zeilenenden) für Shell-Skripte, unabhängig davon ob
+# auf Windows oder Linux/Mac ausgecheckt wird. Verhindert "no such file or
+# directory"-Fehler beim Ausführen von .sh-Dateien in Docker-Containern.
+*.sh text eol=lf
