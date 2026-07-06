@@ -1,15 +1,16 @@
 "use client";
-
 import { useState } from "react";
 import styles from "./Header.module.css";
 import { useAuth } from "@/lib/auth-context";
 import { useCart } from "@/lib/cart-context";
+import { useTheme } from "@/lib/use-theme";
 import AuthModal from "@/components/auth/AuthModal";
 import CartPanel from "@/components/cart/CartPanel";
 
 export default function Header() {
   const { user, logout } = useAuth();
   const { itemCount } = useCart();
+  const { theme, toggleTheme } = useTheme();
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [cartOpen, setCartOpen] = useState(false);
@@ -27,8 +28,14 @@ export default function Header() {
             <span>🍴</span>
             <span className={styles.brandText}>Lieferdienst</span>
           </a>
-
           <nav className={styles.actions}>
+            <button
+              className="btn btn--ghost btn--small"
+              onClick={toggleTheme}
+              aria-label="Theme wechseln"
+            >
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
             {user ? (
               <>
                 <span className={styles.greeting}>
@@ -46,7 +53,6 @@ export default function Header() {
                 Anmelden
               </button>
             )}
-
             <button
               className={styles.cartBtn}
               onClick={() => setCartOpen(true)}
@@ -60,7 +66,6 @@ export default function Header() {
           </nav>
         </div>
       </header>
-
       {authOpen && (
         <AuthModal
           initialTab={authTab}
@@ -68,7 +73,6 @@ export default function Header() {
           onSwitchTab={setAuthTab}
         />
       )}
-
       {cartOpen && <CartPanel onClose={() => setCartOpen(false)} />}
     </>
   );
