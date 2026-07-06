@@ -19,9 +19,28 @@ export default function CartPanel({ onClose }: Props) {
   const { cart, isLoading, error: cartError, updateItem, removeItem, doCheckout } = useCart();
   const [message, setMessage] = useState<{ text: string; success: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const items = cart?.items ?? [];
   const subtotal = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+
+  async function handleUpdate(itemId: number, quantity: number) {
+    setActionError(null);
+    try {
+      await updateItem(itemId, quantity);
+    } catch {
+      setActionError("Menge konnte nicht geändert werden.");
+    }
+  }
+
+  async function handleRemove(itemId: number) {
+    setActionError(null);
+    try {
+      await removeItem(itemId);
+    } catch {
+      setActionError("Artikel konnte nicht entfernt werden.");
+    }
+  }
 
   async function handleCheckout() {
     setMessage(null);
@@ -30,7 +49,8 @@ export default function CartPanel({ onClose }: Props) {
       const order = await doCheckout();
       setMessage({ text: `Bestellt! Gesamt: ${formatPrice(order.total_price)}`, success: true });
     } catch (err: unknown) {
-      setMessage({ text: err instanceof Error ? err.message : "Fehler.", success: false });
+      console.error(err);
+      setMessage({ text: "Bestellung konnte nicht abgeschlossen werden. Bitte erneut versuchen.", success: false });
     } finally {
       setLoading(false);
     }
@@ -44,6 +64,10 @@ export default function CartPanel({ onClose }: Props) {
           <h2 className={styles.panelTitle}>Warenkorb</h2>
           <button className={styles.closeBtn} onClick={onClose} aria-label="Schließen">✕</button>
         </div>
+
+        {actionError && (
+          <p className={styles.message}>{actionError}</p>
+        )}
 
         {isLoading ? (
           <div className={styles.items}>
@@ -78,10 +102,10 @@ export default function CartPanel({ onClose }: Props) {
                     <p className={styles.lineName}>{item.product.name}</p>
                     <p className={styles.linePrice}>{formatPrice(Number(item.product.price) * item.quantity)}</p>
                     <div className={styles.lineControls}>
-                      <button className={styles.qtyBtn} onClick={() => updateItem(item.id, item.quantity - 1)}>−</button>
+                      <button className={styles.qtyBtn} onClick={() => handleUpdate(item.id, item.quantity - 1)}>−</button>
                       <span className={styles.qty}>{item.quantity}</span>
-                      <button className={styles.qtyBtn} onClick={() => updateItem(item.id, item.quantity + 1)}>+</button>
-                      <button className={styles.removeBtn} onClick={() => removeItem(item.id)}>Entfernen</button>
+                      <button className={styles.qtyBtn} onClick={() => handleUpdate(item.id, item.quantity + 1)}>+</button>
+                      <button className={styles.removeBtn} onClick={() => handleRemove(item.id)}>Entfernen</button>
                     </div>
                   </div>
                 </div>
