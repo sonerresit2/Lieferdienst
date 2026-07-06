@@ -28,6 +28,7 @@ export default function CartPanel({ onClose }: Props) {
     setLoading(true);
     try {
       const order = await doCheckout();
-      setMessage({ text: `Bestellt! Gesamt: ${formatPrice(order.total_price)} ✓`, success: true });
+      setMessage({ text: `Bestellt! Gesamt: ${formatPrice(order.total_price)}`, success: true });
     } catch (err: unknown) {
       setMessage({ text: err instanceof Error
+
