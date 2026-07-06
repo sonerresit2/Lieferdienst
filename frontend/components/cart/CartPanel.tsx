@@ -22,6 +22,8 @@ export default function CartPanel({ onClose }: Props) {
 
   const items = cart?.items ?? [];
   const subtotal = items.reduce((s, i) => s + Number(i.product.price) * i.quantity, 0);
+  const { user } = useAuth();
+  const { cart, isLoading, error: cartError, updateItem, removeItem, doCheckout } = useCart();
 
   async function handleCheckout() {
     setMessage(null);
@@ -111,3 +113,25 @@ export default function CartPanel({ onClose }: Props) {
     </>
   );
 }
+{isLoading ? (
+  <div className={styles.items}>
+    {Array.from({ length: 3 }).map((_, i) => (
+      <div key={i} className={styles.skeletonLine} />
+    ))}
+  </div>
+) : cartError ? (
+  <div className={styles.empty}>
+    <span className={styles.emptyIcon}>⚠️</span>
+    <p>{cartError}</p>
+  </div>
+) : items.length === 0 ? (
+  <div className={styles.empty}>
+    <span className={styles.emptyIcon}>🛒</span>
+    <p>Noch nichts im Warenkorb.</p>
+    <p>Füge Gerichte aus der Karte hinzu.</p>
+  </div>
+) : (
+  <div className={styles.items}>
+    {/* bestehende items.map(...) unverändert */}
+  </div>
+)}
