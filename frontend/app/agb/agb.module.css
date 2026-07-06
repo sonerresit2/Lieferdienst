@@ -1,0 +1,41 @@
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 22px 100px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 24px;
+  color: var(--c-ink);
+}
+
+.notice {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  padding: 16px 20px;
+  font-size: 0.85rem;
+  color: var(--c-ink-2);
+  margin-bottom: 40px;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.section h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--c-ink);
+  margin-bottom: 10px;
+}
+
+.section p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--c-ink-2);
+}
