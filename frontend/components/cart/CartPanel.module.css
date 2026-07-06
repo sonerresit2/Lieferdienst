@@ -38,13 +38,13 @@
 .closeBtn {
   width: 30px; height: 30px;
   border-radius: 999px;
-  background: rgba(0,0,0,0.06);
+  background: var(--c-fill);
   display: flex; align-items: center; justify-content: center;
   font-size: 0.8rem;
   color: var(--c-ink-2);
   transition: background .15s;
 }
-.closeBtn:hover { background: rgba(0,0,0,0.12); }
+.closeBtn:hover { background: var(--c-fill-hover); }
 
 .items {
   flex: 1;
