@@ -46,9 +46,9 @@ export default function Home() {
     <main className="page">
       <section className={styles.hero}>
         <p className={styles.heroEyebrow}>Lieferdienst</p>
-        <h1 className={styles.heroTitle}>Gutes Essen,<br />direkt zu dir.</h1>
+        <h1 className={styles.heroTitle}>Weniger kochen.<br />Mehr genießen.</h1>
         <p className={styles.heroSub}>
-          Frische Gerichte von lokalen Anbietern — einfach auswählen, in den Warenkorb, fertig.
+          Kuratierte Gerichte lokaler Anbieter, geliefert in Minuten statt Stunden.
         </p>
       </section>
 
