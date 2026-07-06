@@ -1,0 +1,50 @@
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 16px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 1000;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.text {
+  flex: 1 1 300px;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.link {
+  color: #ea580c;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.decline {
+  background: transparent;
+  border: 1px solid #666;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.accept {
+  background: #ea580c;
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
