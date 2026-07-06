@@ -1,5 +1,4 @@
 "use client";
-
 import {
   createContext,
   useCallback,
@@ -14,6 +13,8 @@ import { useAuth } from "./auth-context";
 interface CartContextValue {
   cart: Cart | null;
   itemCount: number;
+  isLoading: boolean;
+  error: string | null;
   addToCart: (productId: number) => Promise<void>;
   updateItem: (itemId: number, quantity: number) => Promise<void>;
   removeItem: (itemId: number) => Promise<void>;
@@ -24,6 +25,8 @@ interface CartContextValue {
 const CartContext = createContext<CartContextValue>({
   cart: null,
   itemCount: 0,
+  isLoading: false,
+  error: null,
   addToCart: async () => {},
   updateItem: async () => {},
   removeItem: async () => {},
@@ -34,13 +37,25 @@ const CartContext = createContext<CartContextValue>({
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const [cart, setCart] = useState<Cart | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
-    if (!user) { setCart(null); return; }
+    if (!user) {
+      setCart(null);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+    setError(null);
     try {
       setCart(await api.getCart());
     } catch {
       setCart(null);
+      setError("Warenkorb konnte nicht geladen werden.");
+    } finally {
+      setIsLoading(false);
     }
   }, [user]);
 
@@ -71,7 +86,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const itemCount = cart?.items.reduce((s, i) => s + i.quantity, 0) ?? 0;
 
   return (
-    <CartContext.Provider value={{ cart, itemCount, addToCart, updateItem, removeItem, doCheckout, reload }}>
+    <CartContext.Provider
+      value={{ cart, itemCount, isLoading, error, addToCart, updateItem, removeItem, doCheckout, reload }}
+    >
       {children}
     </CartContext.Provider>
   );
