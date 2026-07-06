@@ -1,0 +1,4 @@
+﻿      setMessage({ text: `Bestellt! Gesamt: ${formatPrice(order.total_price)}`, success: true });
+    } catch (err: unknown) {
+      setMessage({ text: err instanceof Error
+

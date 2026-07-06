@@ -1,0 +1,19 @@
+﻿Folder PATH listing for volume OSDisk
+Volume serial number is 00000148 D83C:F12A
+C:\USERS\TOMNIT01\DOWNLOADS\LIEFERDIENST\FRONTEND\APP
+¦   favicon.ico
+¦   globals.css
+¦   layout.tsx
+¦   page.module.css
+¦   page.tsx
+¦   
++---fonts
+¦       GeistMonoVF.woff
+¦       GeistVF.woff
+¦       
++---impressum
+¦       impressum.module.css
+¦       page.tsx
+¦       
++---login
++---register
