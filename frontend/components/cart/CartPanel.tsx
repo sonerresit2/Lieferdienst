@@ -15,8 +15,7 @@ function getImageSrc(imagePath: string) {
 interface Props { onClose: () => void; }
 
 export default function CartPanel({ onClose }: Props) {
-  const { user } = useAuth();
-  const { cart, updateItem, removeItem, doCheckout } = useCart();
+  
   const [message, setMessage] = useState<{ text: string; success: boolean } | null>(null);
   const [loading, setLoading] = useState(false);
 
