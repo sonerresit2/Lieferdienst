@@ -94,9 +94,12 @@ img { display: block; max-width: 100%; }
 .btn--primary:active { transform: scale(.97); }
 .btn--ghost {
   background: var(--c-fill);
-  color: var(--c-ink);
+  color: #fff;
 }
-.btn--ghost:hover { background: var(--c-fill-hover); }
+.btn--ghost:hover { 
+  background: var(--c-fill-hover);
+  color: #fff;
+}
 .btn--ghost-white {
   background: rgba(255,255,255,0.15);
   color: #fff;
