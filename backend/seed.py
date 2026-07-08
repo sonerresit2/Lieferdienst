@@ -96,13 +96,22 @@ try:
         users = [
             User(email="tom@lieferdienst.de",   password_hash=hash_password("passwort123"), full_name="Tom Mustermann", role="customer"),
             User(email="soner@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Soner Yilmaz",   role="customer"),
+            User(email="thomas@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Thomas Laukard",   role="customer"),
+
         ]
         db.add_all(users)
         db.flush()
 
         china = Vendor(name="China-Fan Imbiss",  description="Authentische asiatische Küche — schnell, frisch, lecker.", delivery_fee="1.99", delivery_time_min=11, rating="4.7")
         poke  = Vendor(name="Dai Poke Bowls",    description="Frische Poke Bowls mit saisonalen Zutaten.",               delivery_fee="2.49", delivery_time_min=16, rating="4.5")
-        db.add_all([china, poke])
+        pizza = Vendor(name="Pizza Piazza Bayreuth", description="Italienische Pizza und Pasta.", delivery_fee="2.50", delivery_time_min=35, rating="4.7")
+        doener = Vendor(name="Dönerhaus Bayreuth", description="Döner, Dürüm und türkische Spezialitäten.", delivery_fee="1.99", delivery_time_min=25, rating="4.6")
+        burger = Vendor(name="Burger Manufaktur", description="Frische Burger und Beilagen.", delivery_fee="2.99", delivery_time_min=30, rating="4.5")
+        sushi = Vendor(name="Sushi Sakura", description="Sushi und japanische Spezialitäten.", delivery_fee="3.50", delivery_time_min=40, rating="4.8")
+        franken = Vendor(name="Franken Grill", description="Fränkische Küche und Grillspezialitäten.", delivery_fee="2.50", delivery_time_min=35, rating="4.4")
+        cafe = Vendor(name="Café Schlossterrasse", description="Kaffee, Kuchen und Desserts.", delivery_fee="1.50", delivery_time_min=20, rating="4.7")
+
+        db.add_all([china, poke, pizza, doener, burger, sushi, franken, cafe])
         db.flush()
 
         china_items = [
@@ -121,17 +130,89 @@ try:
             ("Matcha Latte",           "Cremiger Matcha Latte mit Hafermilch, kalt oder warm.",            "3.90",  "Getränk"),
         ]
 
+        pizza_items = [
+            ("Pizza Margherita", "Tomaten und Mozzarella", "8.90", "Hauptgericht"),
+            ("Pizza Salami", "Mit italienischer Salami", "10.90", "Hauptgericht"),
+            ("Tiramisu", "Hausgemachtes Tiramisu", "4.90", "Nachtisch"),
+            ("Cola 0,5L", "Erfrischungsgetränk", "2.90", "Getränk"),
+        ]
+        
+        doener_items = [
+            ("Döner Kebab", "Mit frischem Salat", "7.50", "Hauptgericht"),
+            ("Dürüm", "Gerollter Döner", "8.50", "Hauptgericht"),
+            ("Pommes Frites", "Knusprig und goldbraun", "3.50", "Beilage"),
+            ("Ayran", "Joghurtgetränk", "2.50", "Getränk"),
+        ]
+
+        burger_items = [
+            ("Cheeseburger", "Mit Cheddar", "9.90", "Hauptgericht"),
+            ("Chicken Burger", "Knuspriges Hähnchenfilet", "10.50", "Hauptgericht"),
+            ("Süßkartoffelpommes", "Mit Dip", "4.50", "Beilage"),
+            ("Sprite 0,5L", "Zitronenlimonade", "2.90", "Getränk"),
+        ]
+
+        sushi_items = [
+            ("California Roll", "8 Stück", "8.90", "Hauptgericht"),
+            ("Lachs Nigiri", "5 Stück", "7.90", "Hauptgericht"),
+            ("Edamame", "Gedämpfte Sojabohnen", "4.50", "Vorspeise"),
+            ("Grüner Tee", "Heiß serviert", "2.80", "Getränk"),
+        ]
+
+        franken_items = [
+            ("Fränkischer Braten", "Mit Kloß und Soße", "12.90", "Hauptgericht"),
+            ("Bratwürste", "Mit Sauerkraut", "9.90", "Hauptgericht"),
+            ("Kartoffelsalat", "Hausgemacht", "3.90", "Beilage"),
+            ("Apfelschorle", "0,5 Liter", "2.90", "Getränk"),
+        ]
+
+        cafe_items = [
+            ("Käsekuchen", "Hausgemachter Käsekuchen", "4.50", "Nachtisch"),
+            ("Schwarzwälder Kirschtorte", "Frisch vom Konditor", "4.90", "Nachtisch"),
+            ("Cappuccino", "Italienische Kaffeespezialität", "3.20", "Getränk"),
+            ("Latte Macchiato", "Milchkaffee", "3.80", "Getränk"),
+        ]
+
         for name, desc, price, cat in china_items:
             db.add(Product(vendor_id=china.id, name=name, description=desc, price=price, category=cat, is_available=True))
 
         for name, desc, price, cat in poke_items:
             db.add(Product(vendor_id=poke.id, name=name, description=desc, price=price, category=cat, is_available=True))
+            
+        for name, desc, price, cat in pizza_items:
+            db.add(Product(vendor_id=pizza.id, name=name, description=desc, price=price, category=cat, is_available=True))
+            
+        for name, desc, price, cat in doener_items:
+            db.add(Product(vendor_id=doener.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        
+        for name, desc, price, cat in burger_items:
+            db.add(Product(vendor_id=burger.id, name=name, description=desc, price=price, category=cat, is_available=True))
+            
+        for name, desc, price, cat in sushi_items:
+            db.add(Product(vendor_id=sushi.id, name=name, description=desc, price=price, category=cat, is_available=True))
 
+        for name, desc, price, cat in franken_items:
+            db.add(Product(vendor_id=franken.id, name=name, description=desc, price=price, category=cat, is_available=True))
+
+        for name, desc, price, cat in cafe_items:
+            db.add(Product(vendor_id=cafe.id, name=name, description=desc, price=price, category=cat, is_available=True))
+            
         db.commit()
 
+        product_count = (
+            len(china_items)
+            + len(poke_items)
+            + len(pizza_items)
+            + len(doener_items)
+            + len(burger_items)
+            + len(sushi_items)
+            + len(franken_items)
+            + len(cafe_items)
+        )
+
         print(f"✓ {len(users)} User angelegt")
-        print(f"✓ 2 Anbieter angelegt")
-        print(f"✓ {len(china_items) + len(poke_items)} Produkte angelegt")
+        print(f"✓ 8 Anbieter angelegt")
+        print(f"✓ {product_count} Produkte angelegt")
+
         print()
         print("Login-Daten:")
         for u in users:
