@@ -108,8 +108,14 @@
 }
 
 @media (max-width: 600px) {
-  .hero { padding: 40px 0 32px; }
-  .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .hero {
+    padding: 40px 0 32px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 .skeletonCard {
   height: 220px;
