@@ -1,0 +1,133 @@
+.vendor-scroll {
+  display: flex;
+  gap: 10px;
+
+  overflow-x: auto;
+
+  padding-bottom: 4px;
+  margin-bottom: 36px;
+}
+
+.vendor-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.vendor-chip {
+
+  flex: 0 0 auto;
+
+  padding: 8px 16px;
+
+  border-radius: 999px;
+
+  border: 1px solid #ddd;
+
+  background: white;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+}
+
+.vendor-chip:hover {
+  border-color: #0a84ff;
+}
+
+.vendor-chip-active {
+
+  background: #0a84ff;
+
+  color: white;
+
+  border-color: #0a84ff;
+
+}
+
+.grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(220px, 1fr));
+
+  gap: 16px;
+
+}
+
+/* Gesamter Seitencontainer */
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Hero-Bereich */
+
+.hero {
+  padding: 64px 0 48px;
+}
+
+.hero-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0a84ff;
+  margin-bottom: 10px;
+}
+
+.hero-title {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  max-width: 46ch;
+  letter-spacing: -0.015em;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* Kategorien */
+
+.cat-row {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 32px;
+  overflow-x: auto;
+}
+
+.cat-row::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-tab {
+  padding: 10px 0;
+  margin-right: 28px;
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+
+  color: #6b7280;
+
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.cat-tab:hover {
+  color: #111827;
+}
+
+.cat-tab-active {
+  color: #111827;
+  border-bottom: 2px solid #111827;
+  font-weight: 600;
+}

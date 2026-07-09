@@ -1,0 +1,59 @@
+<article class="card">
+
+  <div class="image">
+
+    <img
+      *ngIf="imageUrl"
+      [src]="imageUrl"
+      [alt]="product.name">
+
+    <span
+      *ngIf="!imageUrl"
+      class="emoji">
+      🍽️
+    </span>
+
+    <span
+      class="badge">
+      {{ product.category }}
+    </span>
+
+  </div>
+
+  <div class="body">
+
+    <h3>
+      {{ product.name }}
+    </h3>
+
+    <p class="description">
+      {{ product.description }}
+    </p>
+
+    <div class="tags">
+
+      <span
+        *ngFor="let tag of product.dietary_tags"
+        class="tag">
+
+        {{ tag }}
+
+      </span>
+
+    </div>
+
+    <div class="footer">
+
+      <span class="price">
+        {{ product.price }} €
+      </span>
+
+      <button>
+        Hinzufügen
+      </button>
+
+    </div>
+
+  </div>
+
+</article>

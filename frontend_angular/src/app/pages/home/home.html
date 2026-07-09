@@ -1,0 +1,93 @@
+
+<div class="page">
+
+
+<!-- Hero-Bereich -->
+
+<section class="hero">
+
+  <p class="hero-eyebrow">
+    LIEFERDIENST
+  </p>
+
+  <h1 class="hero-title">
+    Weniger kochen.<br>
+    Mehr genießen.
+  </h1>
+
+  <p class="hero-subtitle">
+    Kuratierte Gerichte lokaler Anbieter,
+    geliefert in Minuten statt Stunden.
+  </p>
+
+</section>
+
+<!-- Anbieterfilter -->
+
+<div class="vendor-scroll">
+
+  <button
+    class="vendor-chip"
+    [class.vendor-chip-active]="selectedVendor === null"
+    (click)="selectedVendor = null">
+
+    Alle
+
+  </button>
+
+  <button
+    *ngFor="let vendor of vendors"
+    class="vendor-chip"
+    [class.vendor-chip-active]="selectedVendor === vendor.id"
+    (click)="selectedVendor = vendor.id">
+
+    {{ vendor.name }}
+
+  </button>
+
+</div>
+
+<!-- Kategorien -->
+
+<div class="cat-row">
+
+  <button
+    class="cat-tab"
+    [class.cat-tab-active]="selectedCategory === null"
+    (click)="selectedCategory = null">
+
+    Alle
+
+  </button>
+
+  <button
+    *ngFor="let category of categories"
+    class="cat-tab"
+    [class.cat-tab-active]="selectedCategory === category"
+    (click)="selectedCategory = category">
+
+    {{ category }}
+
+  </button>
+
+</div>
+
+<!-- Produktanzahl -->
+
+<p>
+  Produkte gefunden:
+  {{ filteredProducts.length }}
+</p>
+
+<!-- Produktraster -->
+
+<div class="grid">
+
+  <app-product-card
+    *ngFor="let product of filteredProducts"
+    [product]="product">
+  </app-product-card>
+
+</div>
+
+</div>
