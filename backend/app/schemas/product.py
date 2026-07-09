@@ -17,6 +17,7 @@ class ProductBase(BaseModel):
     price: Decimal = Field(gt=0, description="Preis muss größer als 0 sein")
     category: Optional[str] = Field(default=None, max_length=100)
     is_available: bool = True
+    dietary_tags: list[str] = Field(default_factory=list)
 
 
 class ProductCreate(ProductBase):
@@ -29,6 +30,7 @@ class ProductUpdate(BaseModel):
     price: Optional[Decimal] = Field(default=None, gt=0)
     category: Optional[str] = Field(default=None, max_length=100)
     is_available: Optional[bool] = None
+    dietary_tags: Optional[list[str]] = None
 
 
 class ProductOut(ProductBase):

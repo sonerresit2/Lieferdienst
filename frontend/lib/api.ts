@@ -54,10 +54,12 @@ export async function getVendors(): Promise<Vendor[]> {
 export async function getProducts(params: {
   vendorId?: number;
   category?: string;
+  tags?: string[];
 } = {}): Promise<Product[]> {
   const qs = new URLSearchParams();
   if (params.vendorId) qs.set("vendor_id", String(params.vendorId));
   if (params.category) qs.set("category", params.category);
+  if (params.tags && params.tags.length > 0) qs.set("tags", params.tags.join(","));
   const query = qs.toString() ? `?${qs}` : "";
   return request<Product[]>(`/products${query}`);
 }

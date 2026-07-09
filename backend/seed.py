@@ -115,86 +115,86 @@ try:
         db.flush()
 
         china_items = [
-            ("Gebratene Nudeln",       "Wok-gebratene Nudeln mit Hühnchen, Ei und frischem Gemüse.",           "8.90",  "Hauptgericht"),
-            ("Kung Pao Chicken",       "Gebratenes Hühnchen mit Erdnüssen und Chili in würziger Sauce.",        "10.50", "Hauptgericht"),
-            ("Frühlingrollen (4 Stk)", "Knusprige Frühlingsrollen, vegetarisch, mit Sweet-Chili-Dip.",          "4.50",  "Vorspeise"),
-            ("Wan-Tan-Suppe",          "Klare Brühe mit gefüllten Wan-Tan-Teigtaschen und Frühlingszwiebeln.",  "5.90",  "Vorspeise"),
-            ("Mango-Eistee",           "Hausgemachter Eistee mit frischer Mango, kalt serviert.",               "2.90",  "Getränk"),
+            ("Gebratene Nudeln",       "Wok-gebratene Nudeln mit Hühnchen, Ei und frischem Gemüse.",           "8.90",  "Hauptgericht", []),
+            ("Kung Pao Chicken",       "Gebratenes Hühnchen mit Erdnüssen und Chili in würziger Sauce.",        "10.50", "Hauptgericht", []),
+            ("Frühlingrollen (4 Stk)", "Knusprige Frühlingsrollen, vegetarisch, mit Sweet-Chili-Dip.",          "4.50",  "Vorspeise", ["vegetarisch"]),
+            ("Wan-Tan-Suppe",          "Klare Brühe mit gefüllten Wan-Tan-Teigtaschen und Frühlingszwiebeln.",  "5.90",  "Vorspeise", []),
+            ("Mango-Eistee",           "Hausgemachter Eistee mit frischer Mango, kalt serviert.",               "2.90",  "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         poke_items = [
-            ("Spicy Tuna Bowl",        "Sushireis, roher Thunfisch, Avocado, Edamame, Sriracha-Mayo.",   "11.90", "Bowl"),
-            ("Chicken Teriyaki Bowl",  "Basmati-Reis, gegrilltes Hühnchen, Brokkoli, Teriyaki-Glasur.",   "10.90", "Bowl"),
-            ("Veggie Rainbow Bowl",    "Quinoa, geröstete Kichererbsen, Paprika, Gurke, Tahini-Dressing.", "9.90",  "Bowl"),
-            ("Miso-Suppe",             "Traditionelle japanische Miso-Suppe mit Tofu und Wakame.",         "3.50",  "Beilage"),
-            ("Matcha Latte",           "Cremiger Matcha Latte mit Hafermilch, kalt oder warm.",            "3.90",  "Getränk"),
+            ("Spicy Tuna Bowl",        "Sushireis, roher Thunfisch, Avocado, Edamame, Sriracha-Mayo.",   "11.90", "Bowl", []),
+            ("Chicken Teriyaki Bowl",  "Basmati-Reis, gegrilltes Hühnchen, Brokkoli, Teriyaki-Glasur.",   "10.90", "Bowl", []),
+            ("Veggie Rainbow Bowl",    "Quinoa, geröstete Kichererbsen, Paprika, Gurke, Tahini-Dressing.", "9.90",  "Bowl", ["vegan", "vegetarisch", "glutenfrei"]),
+            ("Miso-Suppe",             "Traditionelle japanische Miso-Suppe mit Tofu und Wakame.",         "3.50",  "Beilage", ["vegetarisch"]),
+            ("Matcha Latte",           "Cremiger Matcha Latte mit Hafermilch, kalt oder warm.",            "3.90",  "Getränk", ["vegan", "vegetarisch", "laktosefrei", "glutenfrei", "nussfrei"]),
         ]
 
         pizza_items = [
-            ("Pizza Margherita", "Tomaten und Mozzarella", "8.90", "Hauptgericht"),
-            ("Pizza Salami", "Mit italienischer Salami", "10.90", "Hauptgericht"),
-            ("Tiramisu", "Hausgemachtes Tiramisu", "4.90", "Nachtisch"),
-            ("Cola 0,5L", "Erfrischungsgetränk", "2.90", "Getränk"),
+            ("Pizza Margherita", "Tomaten und Mozzarella", "8.90", "Hauptgericht", ["vegetarisch"]),
+            ("Pizza Salami", "Mit italienischer Salami", "10.90", "Hauptgericht", []),
+            ("Tiramisu", "Hausgemachtes Tiramisu", "4.90", "Nachtisch", ["vegetarisch"]),
+            ("Cola 0,5L", "Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
         
         doener_items = [
-            ("Döner Kebab", "Mit frischem Salat", "7.50", "Hauptgericht"),
-            ("Dürüm", "Gerollter Döner", "8.50", "Hauptgericht"),
-            ("Pommes Frites", "Knusprig und goldbraun", "3.50", "Beilage"),
-            ("Ayran", "Joghurtgetränk", "2.50", "Getränk"),
+            ("Döner Kebab", "Mit frischem Salat", "7.50", "Hauptgericht", []),
+            ("Dürüm", "Gerollter Döner", "8.50", "Hauptgericht", []),
+            ("Pommes Frites", "Knusprig und goldbraun", "3.50", "Beilage", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Ayran", "Joghurtgetränk", "2.50", "Getränk", ["vegetarisch"]),
         ]
 
         burger_items = [
-            ("Cheeseburger", "Mit Cheddar", "9.90", "Hauptgericht"),
-            ("Chicken Burger", "Knuspriges Hähnchenfilet", "10.50", "Hauptgericht"),
-            ("Süßkartoffelpommes", "Mit Dip", "4.50", "Beilage"),
-            ("Sprite 0,5L", "Zitronenlimonade", "2.90", "Getränk"),
+            ("Cheeseburger", "Mit Cheddar", "9.90", "Hauptgericht", []),
+            ("Chicken Burger", "Knuspriges Hähnchenfilet", "10.50", "Hauptgericht", []),
+            ("Süßkartoffelpommes", "Mit Dip", "4.50", "Beilage", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Sprite 0,5L", "Zitronenlimonade", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         sushi_items = [
-            ("California Roll", "8 Stück", "8.90", "Hauptgericht"),
-            ("Lachs Nigiri", "5 Stück", "7.90", "Hauptgericht"),
-            ("Edamame", "Gedämpfte Sojabohnen", "4.50", "Vorspeise"),
-            ("Grüner Tee", "Heiß serviert", "2.80", "Getränk"),
+            ("California Roll", "8 Stück", "8.90", "Hauptgericht", []),
+            ("Lachs Nigiri", "5 Stück", "7.90", "Hauptgericht", []),
+            ("Edamame", "Gedämpfte Sojabohnen", "4.50", "Vorspeise", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Grüner Tee", "Heiß serviert", "2.80", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         franken_items = [
-            ("Fränkischer Braten", "Mit Kloß und Soße", "12.90", "Hauptgericht"),
-            ("Bratwürste", "Mit Sauerkraut", "9.90", "Hauptgericht"),
-            ("Kartoffelsalat", "Hausgemacht", "3.90", "Beilage"),
-            ("Apfelschorle", "0,5 Liter", "2.90", "Getränk"),
+            ("Fränkischer Braten", "Mit Kloß und Soße", "12.90", "Hauptgericht", []),
+            ("Bratwürste", "Mit Sauerkraut", "9.90", "Hauptgericht", []),
+            ("Kartoffelsalat", "Hausgemacht", "3.90", "Beilage", ["vegetarisch"]),
+            ("Apfelschorle", "0,5 Liter", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         cafe_items = [
-            ("Käsekuchen", "Hausgemachter Käsekuchen", "4.50", "Nachtisch"),
-            ("Schwarzwälder Kirschtorte", "Frisch vom Konditor", "4.90", "Nachtisch"),
-            ("Cappuccino", "Italienische Kaffeespezialität", "3.20", "Getränk"),
-            ("Latte Macchiato", "Milchkaffee", "3.80", "Getränk"),
+            ("Käsekuchen", "Hausgemachter Käsekuchen", "4.50", "Nachtisch", ["vegetarisch"]),
+            ("Schwarzwälder Kirschtorte", "Frisch vom Konditor", "4.90", "Nachtisch", ["vegetarisch"]),
+            ("Cappuccino", "Italienische Kaffeespezialität", "3.20", "Getränk", ["vegetarisch"]),
+            ("Latte Macchiato", "Milchkaffee", "3.80", "Getränk", ["vegetarisch"]),
         ]
 
-        for name, desc, price, cat in china_items:
-            db.add(Product(vendor_id=china.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in china_items:
+            db.add(Product(vendor_id=china.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
 
-        for name, desc, price, cat in poke_items:
-            db.add(Product(vendor_id=poke.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in poke_items:
+            db.add(Product(vendor_id=poke.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
             
-        for name, desc, price, cat in pizza_items:
-            db.add(Product(vendor_id=pizza.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in pizza_items:
+            db.add(Product(vendor_id=pizza.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
             
-        for name, desc, price, cat in doener_items:
-            db.add(Product(vendor_id=doener.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in doener_items:
+            db.add(Product(vendor_id=doener.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
         
-        for name, desc, price, cat in burger_items:
-            db.add(Product(vendor_id=burger.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in burger_items:
+            db.add(Product(vendor_id=burger.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
             
-        for name, desc, price, cat in sushi_items:
-            db.add(Product(vendor_id=sushi.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in sushi_items:
+            db.add(Product(vendor_id=sushi.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
 
-        for name, desc, price, cat in franken_items:
-            db.add(Product(vendor_id=franken.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in franken_items:
+            db.add(Product(vendor_id=franken.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
 
-        for name, desc, price, cat in cafe_items:
-            db.add(Product(vendor_id=cafe.id, name=name, description=desc, price=price, category=cat, is_available=True))
+        for name, desc, price, cat, tags in cafe_items:
+            db.add(Product(vendor_id=cafe.id, name=name, description=desc, price=price, category=cat, is_available=True, dietary_tags=tags))
             
         db.commit()
 

@@ -39,15 +39,22 @@ def _attach_rating_summary(db: Session, products: list[Product]) -> list[Product
 def list_products(
     vendor_id: int | None = None,
     category: str | None = None,
+    tags: str | None = None,
     db: Session = Depends(get_db),
 ):
-    """Liefert alle Produkte als JSON. Optional gefiltert nach Anbieter oder Kategorie."""
+    """Liefert alle Produkte als JSON. Optional gefiltert nach Anbieter, Kategorie
+    oder Ernährungs-Tags (kommagetrennt, z. B. tags=vegan,glutenfrei -> Produkt muss
+    ALLE angegebenen Tags haben)."""
     query = db.query(Product).options(joinedload(Product.images))
 
     if vendor_id is not None:
         query = query.filter(Product.vendor_id == vendor_id)
     if category is not None:
         query = query.filter(Product.category == category)
+    if tags:
+        tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+        if tag_list:
+            query = query.filter(Product.dietary_tags.contains(tag_list))
 
     products = query.all()
     return _attach_rating_summary(db, products)

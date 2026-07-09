@@ -94,6 +94,24 @@
   margin-top: 2px;
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.tag {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #2E7D32;
+  background: rgba(46, 125, 50, 0.12);
+  padding: 2px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .rateLink {
   background: none;
   border: none;

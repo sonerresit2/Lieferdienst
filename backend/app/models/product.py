@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, Numeric, Boolean, DateTime, ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -15,6 +16,10 @@ class Product(Base):
     price = Column(Numeric(8, 2), nullable=False)
     category = Column(String(100), nullable=True)
     is_available = Column(Boolean, nullable=False, default=True)
+    # Ernährungs-/Allergen-Filter, z. B. ["vegan", "glutenfrei"]. Bewusst als
+    # einfaches String-Array statt eigener Tabelle: es gibt keine Beziehung,
+    # die referentielle Integrität bräuchte, nur eine Menge von Merkmalen.
+    dietary_tags = Column(ARRAY(String), nullable=False, server_default="{}")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     vendor = relationship("Vendor", back_populates="products")

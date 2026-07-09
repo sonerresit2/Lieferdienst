@@ -2,7 +2,7 @@
 
 import styles from "./ProductCard.module.css";
 import type { Product } from "@/lib/types";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, formatTagLabel } from "@/lib/utils";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useReviews } from "@/lib/reviews-context";
@@ -76,6 +76,14 @@ export default function ProductCard({ product, onNeedAuth }: Props) {
         <p className={styles.name}>{product.name}</p>
         {product.description && (
           <p className={styles.desc}>{product.description}</p>
+        )}
+
+        {product.dietary_tags.length > 0 && (
+          <div className={styles.tags}>
+            {product.dietary_tags.map((t) => (
+              <span key={t} className={styles.tag}>{formatTagLabel(t)}</span>
+            ))}
+          </div>
         )}
 
         {(product.review_count > 0 || eligible) && (

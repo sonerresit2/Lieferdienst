@@ -93,6 +93,49 @@
 .catTab:hover { color: var(--c-ink); }
 .catTabActive { color: var(--c-ink); border-bottom-color: var(--c-ink); font-weight: 600; }
 
+/* ── Ernährungs-Filter ────────────────────────── */
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.tagChip {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--c-fill);
+  color: var(--c-ink-2);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.tagChip:hover {
+  background: var(--c-fill-hover);
+}
+
+.tagChipActive {
+  background: rgba(255, 149, 0, 0.15);
+  color: #FF9500;
+  border-color: #FF9500;
+  font-weight: 600;
+}
+
+.tagClear {
+  padding: 5px 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 /* ── Produktraster ────────────────────────────── */
 .grid {
   display: grid;
@@ -129,4 +172,3 @@
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
-

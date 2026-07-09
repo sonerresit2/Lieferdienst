@@ -17,6 +17,7 @@ export interface Product {
   images: ProductImage[];
   avg_rating: number | null;
   review_count: number;
+  dietary_tags: string[];
 }
 
 export interface Vendor {

@@ -32,3 +32,18 @@ export function deriveCategories(products: Product[]): string[] {
 
   return [...sorted, ...remaining];
 }
+
+export function deriveDietaryTags(products: Product[]): string[] {
+  const tags = new Set<string>();
+  products.forEach((p) => p.dietary_tags.forEach((t) => tags.add(t)));
+
+  const order = ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"];
+  const sorted = order.filter((t) => tags.has(t));
+  const remaining = Array.from(tags).filter((t) => !order.includes(t));
+
+  return [...sorted, ...remaining];
+}
+
+export function formatTagLabel(tag: string): string {
+  return tag.charAt(0).toUpperCase() + tag.slice(1);
+}

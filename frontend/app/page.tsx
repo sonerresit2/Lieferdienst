@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 import { getProducts, getVendors } from "@/lib/api";
 import type { Product, Vendor } from "@/lib/types";
-import { deriveCategories } from "@/lib/utils";
+import { deriveCategories, deriveDietaryTags, formatTagLabel } from "@/lib/utils";
 import ProductCard from "@/components/products/ProductCard";
 import AuthModal from "@/components/auth/AuthModal";
 import VendorRatingBar from "@/components/vendors/VendorRatingBar";
@@ -13,6 +13,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedVendor, setSelectedVendor] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [isLoading, setIsLoading] = useState(true);
@@ -37,14 +38,23 @@ export default function Home() {
     [vendors, selectedVendor]
   );
   const categories = useMemo(() => deriveCategories(products), [products]);
+  const dietaryTags = useMemo(() => deriveDietaryTags(products), [products]);
+
+  function toggleTag(tag: string) {
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  }
+
   const filtered = useMemo(
     () =>
       products.filter((p) => {
         const matchV = selectedVendor === null || p.vendor_id === selectedVendor;
         const matchC = selectedCategory === null || p.category === selectedCategory;
-        return matchV && matchC;
+        const matchT = selectedTags.every((t) => p.dietary_tags.includes(t));
+        return matchV && matchC && matchT;
       }),
-    [products, selectedVendor, selectedCategory]
+    [products, selectedVendor, selectedCategory, selectedTags]
   );
 
   return (
@@ -95,6 +105,26 @@ export default function Home() {
                 >{c}</button>
               ))}
             </nav>
+          )}
+
+          {dietaryTags.length > 0 && (
+            <div className={styles.tagRow}>
+              {dietaryTags.map((t) => (
+                <button
+                  key={t}
+                  className={`${styles.tagChip} ${selectedTags.includes(t) ? styles.tagChipActive : ""}`}
+                  onClick={() => toggleTag(t)}
+                  aria-pressed={selectedTags.includes(t)}
+                >
+                  {formatTagLabel(t)}
+                </button>
+              ))}
+              {selectedTags.length > 0 && (
+                <button className={styles.tagClear} onClick={() => setSelectedTags([])}>
+                  Filter zurücksetzen
+                </button>
+              )}
+            </div>
           )}
 
           {isLoading ? (
