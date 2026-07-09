@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.core.database import Base, engine
 from app.core.error_handlers import register_exception_handlers
-from app.routers import products, product_images, vendors, auth, cart, orders
+from app.routers import products, product_images, vendors, auth, cart, orders, reviews
 
 # Erstellt alle Tabellen aus den Models, falls sie noch nicht existieren.
 # Für ein Schulprojekt ausreichend; in größeren Projekten würde man hierfür
@@ -36,6 +36,7 @@ app.include_router(products.router)
 app.include_router(product_images.router)
 app.include_router(cart.router)
 app.include_router(orders.router)
+app.include_router(reviews.router)
 
 
 @app.get("/", tags=["Status"])

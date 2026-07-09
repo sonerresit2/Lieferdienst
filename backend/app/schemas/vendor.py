@@ -18,4 +18,5 @@ class VendorOut(VendorBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
-    rating: Optional[Decimal] = None
+    avg_rating: Optional[float] = None
+    review_count: int = 0

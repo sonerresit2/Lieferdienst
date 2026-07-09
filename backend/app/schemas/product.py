@@ -37,3 +37,5 @@ class ProductOut(ProductBase):
     id: int
     vendor_id: int
     images: list[ProductImageOut] = []
+    avg_rating: Optional[float] = None
+    review_count: int = 0

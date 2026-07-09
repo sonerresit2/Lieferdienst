@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app.core.database import SessionLocal, engine, Base
 from app.core.security import hash_password
-from app.models import User, Vendor, Product, ProductImage
+from app.models import User, Vendor, Product, ProductImage, Order, OrderItem, Review
 
 Base.metadata.create_all(bind=engine)
 db = SessionLocal()
@@ -102,14 +102,14 @@ try:
         db.add_all(users)
         db.flush()
 
-        china = Vendor(name="China-Fan Imbiss",  description="Authentische asiatische Küche — schnell, frisch, lecker.", delivery_fee="1.99", delivery_time_min=11, rating="4.7")
-        poke  = Vendor(name="Dai Poke Bowls",    description="Frische Poke Bowls mit saisonalen Zutaten.",               delivery_fee="2.49", delivery_time_min=16, rating="4.5")
-        pizza = Vendor(name="Pizza Piazza Bayreuth", description="Italienische Pizza und Pasta.", delivery_fee="2.50", delivery_time_min=35, rating="4.7")
-        doener = Vendor(name="Dönerhaus Bayreuth", description="Döner, Dürüm und türkische Spezialitäten.", delivery_fee="1.99", delivery_time_min=25, rating="4.6")
-        burger = Vendor(name="Burger Manufaktur", description="Frische Burger und Beilagen.", delivery_fee="2.99", delivery_time_min=30, rating="4.5")
-        sushi = Vendor(name="Sushi Sakura", description="Sushi und japanische Spezialitäten.", delivery_fee="3.50", delivery_time_min=40, rating="4.8")
-        franken = Vendor(name="Franken Grill", description="Fränkische Küche und Grillspezialitäten.", delivery_fee="2.50", delivery_time_min=35, rating="4.4")
-        cafe = Vendor(name="Café Schlossterrasse", description="Kaffee, Kuchen und Desserts.", delivery_fee="1.50", delivery_time_min=20, rating="4.7")
+        china = Vendor(name="China-Fan Imbiss",  description="Authentische asiatische Küche — schnell, frisch, lecker.", delivery_fee="1.99", delivery_time_min=11)
+        poke  = Vendor(name="Dai Poke Bowls",    description="Frische Poke Bowls mit saisonalen Zutaten.",               delivery_fee="2.49", delivery_time_min=16)
+        pizza = Vendor(name="Pizza Piazza Bayreuth", description="Italienische Pizza und Pasta.", delivery_fee="2.50", delivery_time_min=35)
+        doener = Vendor(name="Dönerhaus Bayreuth", description="Döner, Dürüm und türkische Spezialitäten.", delivery_fee="1.99", delivery_time_min=25)
+        burger = Vendor(name="Burger Manufaktur", description="Frische Burger und Beilagen.", delivery_fee="2.99", delivery_time_min=30)
+        sushi = Vendor(name="Sushi Sakura", description="Sushi und japanische Spezialitäten.", delivery_fee="3.50", delivery_time_min=40)
+        franken = Vendor(name="Franken Grill", description="Fränkische Küche und Grillspezialitäten.", delivery_fee="2.50", delivery_time_min=35)
+        cafe = Vendor(name="Café Schlossterrasse", description="Kaffee, Kuchen und Desserts.", delivery_fee="1.50", delivery_time_min=20)
 
         db.add_all([china, poke, pizza, doener, burger, sushi, franken, cafe])
         db.flush()
@@ -196,6 +196,40 @@ try:
         for name, desc, price, cat in cafe_items:
             db.add(Product(vendor_id=cafe.id, name=name, description=desc, price=price, category=cat, is_available=True))
             
+        db.commit()
+
+        # ===== Demo-Bestellungen + Bewertungen =====
+        # Ohne das könnten Anbieter/Produkte direkt nach dem Seed nicht bewertet
+        # werden (Bewerten setzt eine eigene Bestellung voraus) und die Sterne
+        # wären in der Präsentation überall leer.
+        tom, soner, thomas = users
+
+        def make_order(user, vendor, items):
+            """items: Liste von (Product, quantity)-Tupeln, alle vom selben vendor."""
+            total = sum(p.price * qty for p, qty in items)
+            order = Order(user_id=user.id, vendor_id=vendor.id, status="pending", total_price=total)
+            db.add(order)
+            db.flush()
+            for product, qty in items:
+                db.add(OrderItem(order_id=order.id, product_id=product.id, quantity=qty, unit_price=product.price))
+            return order
+
+        china_products = db.query(Product).filter(Product.vendor_id == china.id).all()
+        poke_products = db.query(Product).filter(Product.vendor_id == poke.id).all()
+        pizza_products = db.query(Product).filter(Product.vendor_id == pizza.id).all()
+
+        order1 = make_order(tom, china, [(china_products[0], 1), (china_products[2], 1)])
+        order2 = make_order(soner, poke, [(poke_products[0], 2)])
+        order3 = make_order(thomas, pizza, [(pizza_products[0], 1)])
+        db.flush()
+
+        db.add_all([
+            Review(user_id=tom.id, vendor_id=china.id, order_id=order1.id, rating=5, comment="Sehr schnell geliefert, top!"),
+            Review(user_id=tom.id, product_id=china_products[0].id, order_id=order1.id, rating=4, comment="Lecker, könnte etwas würziger sein."),
+            Review(user_id=soner.id, vendor_id=poke.id, order_id=order2.id, rating=5, comment="Frisch und lecker."),
+            Review(user_id=soner.id, product_id=poke_products[0].id, order_id=order2.id, rating=5),
+            Review(user_id=thomas.id, vendor_id=pizza.id, order_id=order3.id, rating=4, comment="Gute Pizza, Lieferzeit ok."),
+        ])
         db.commit()
 
         product_count = (

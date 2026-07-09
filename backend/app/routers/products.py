@@ -1,12 +1,38 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import func
 
 from app.core.database import get_db
 from app.models.product import Product
 from app.models.vendor import Vendor
+from app.models.review import Review
 from app.schemas.product import ProductOut, ProductCreate, ProductUpdate
 
 router = APIRouter(prefix="/products", tags=["Produkte"])
+
+
+def _attach_rating_summary(db: Session, products: list[Product]) -> list[Product]:
+    """Berechnet Ø-Bewertung und Anzahl je Produkt per SQL-Aggregation und
+    haengt sie transient (nicht persistiert) an die ORM-Objekte an.
+    """
+    if not products:
+        return products
+
+    product_ids = [p.id for p in products]
+    rows = (
+        db.query(Review.product_id, func.avg(Review.rating), func.count(Review.id))
+        .filter(Review.product_id.in_(product_ids))
+        .group_by(Review.product_id)
+        .all()
+    )
+    summary = {product_id: (float(avg), count) for product_id, avg, count in rows}
+
+    for product in products:
+        avg, count = summary.get(product.id, (None, 0))
+        product.avg_rating = round(avg, 1) if avg is not None else None
+        product.review_count = count
+
+    return products
 
 
 @router.get("", response_model=list[ProductOut])
@@ -23,7 +49,8 @@ def list_products(
     if category is not None:
         query = query.filter(Product.category == category)
 
-    return query.all()
+    products = query.all()
+    return _attach_rating_summary(db, products)
 
 
 @router.get("/{product_id}", response_model=ProductOut)
@@ -36,6 +63,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
     )
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Produkt nicht gefunden.")
+    _attach_rating_summary(db, [product])
     return product
 
 
@@ -49,6 +77,8 @@ def create_product(payload: ProductCreate, db: Session = Depends(get_db)):
     db.add(product)
     db.commit()
     db.refresh(product)
+    product.avg_rating = None
+    product.review_count = 0
     return product
 
 
@@ -63,6 +93,7 @@ def update_product(product_id: int, payload: ProductUpdate, db: Session = Depend
 
     db.commit()
     db.refresh(product)
+    _attach_rating_summary(db, [product])
     return product
 
 

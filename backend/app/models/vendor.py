@@ -11,7 +11,8 @@ class Vendor(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     description = Column(Text, nullable=True)
-    rating = Column(Numeric(2, 1), nullable=True)
+    # Kein gespeichertes rating-Feld mehr: der Durchschnitt wird live aus
+    # den reviews berechnet (siehe routers/vendors.py, _attach_rating_summary).
     delivery_fee = Column(Numeric(6, 2), nullable=False, default=0)
     delivery_time_min = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

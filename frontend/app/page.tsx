@@ -6,6 +6,7 @@ import type { Product, Vendor } from "@/lib/types";
 import { deriveCategories } from "@/lib/utils";
 import ProductCard from "@/components/products/ProductCard";
 import AuthModal from "@/components/auth/AuthModal";
+import VendorRatingBar from "@/components/vendors/VendorRatingBar";
 
 export default function Home() {
   const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -31,6 +32,10 @@ export default function Home() {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const selectedVendorObj = useMemo(
+    () => vendors.find((v) => v.id === selectedVendor) ?? null,
+    [vendors, selectedVendor]
+  );
   const categories = useMemo(() => deriveCategories(products), [products]);
   const filtered = useMemo(
     () =>
@@ -73,6 +78,8 @@ export default function Home() {
               </button>
             ))}
           </div>
+
+          {selectedVendorObj && <VendorRatingBar vendor={selectedVendorObj} />}
 
           {categories.length > 0 && (
             <nav className={styles.catRow}>

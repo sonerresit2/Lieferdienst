@@ -5,7 +5,9 @@ import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
+import { useReviews } from "@/lib/reviews-context";
 import { useState } from "react";
+import RatingStars from "@/components/shared/RatingStars";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -17,7 +19,10 @@ interface Props {
 export default function ProductCard({ product, onNeedAuth }: Props) {
   const { user } = useAuth();
   const { addToCart } = useCart();
+  const { canReviewProduct, myProductReview, submitProductReview } = useReviews();
   const [adding, setAdding] = useState(false);
+  const [ratingOpen, setRatingOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const primaryImage =
     product.images.find((i) => i.is_primary) ?? product.images[0];
@@ -40,6 +45,19 @@ export default function ProductCard({ product, onNeedAuth }: Props) {
     }
   }
 
+  async function handleRate(rating: number) {
+    setSubmitting(true);
+    try {
+      await submitProductReview(product.id, rating);
+      setRatingOpen(false);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  const myReview = myProductReview(product.id);
+  const eligible = Boolean(user) && canReviewProduct(product.id);
+
   return (
     <article className={styles.card}>
       <div className={styles.image}>
@@ -59,6 +77,32 @@ export default function ProductCard({ product, onNeedAuth }: Props) {
         {product.description && (
           <p className={styles.desc}>{product.description}</p>
         )}
+
+        {(product.review_count > 0 || eligible) && (
+          <div className={styles.ratingRow}>
+            {product.review_count > 0 && (
+              <RatingStars value={product.avg_rating} count={product.review_count} />
+            )}
+            {eligible && !ratingOpen && (
+              <button type="button" className={styles.rateLink} onClick={() => setRatingOpen(true)}>
+                {myReview ? "Bewertung ändern" : "Bewerten"}
+              </button>
+            )}
+          </div>
+        )}
+
+        {ratingOpen && (
+          <div className={styles.rateInput}>
+            <RatingStars
+              value={myReview?.rating ?? 0}
+              interactive
+              size="md"
+              onChange={handleRate}
+            />
+            {submitting && <span className={styles.rateHint}>Speichere…</span>}
+          </div>
+        )}
+
         <div className={styles.footer}>
           <span className={styles.price}>{formatPrice(product.price)}</span>
           <button

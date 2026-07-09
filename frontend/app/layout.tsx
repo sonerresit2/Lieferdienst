@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 import { CartProvider } from "@/lib/cart-context";
+import { ReviewsProvider } from "@/lib/reviews-context";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieBanner from "@/components/layout/CookieBanner";
@@ -17,10 +18,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <AuthProvider>
           <CartProvider>
-            <Header />
-            {children}
-            <Footer />
-            <CookieBanner />
+            <ReviewsProvider>
+              <Header />
+              {children}
+              <Footer />
+              <CookieBanner />
+            </ReviewsProvider>
           </CartProvider>
         </AuthProvider>
       </body>

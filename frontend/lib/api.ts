@@ -1,4 +1,4 @@
-import type { Cart, Order, Product, Token, User, Vendor } from "./types";
+import type { Cart, Order, Product, Review, Token, User, Vendor } from "./types";
 
 // Im Browser: http://localhost:8000 (Backend läuft außerhalb des Docker-Netzwerks,
 // daher immer localhost, nicht der Docker-Servicename "backend").
@@ -129,4 +129,36 @@ export async function removeCartItem(itemId: number): Promise<Cart> {
 
 export async function checkout(): Promise<Order> {
   return request<Order>("/orders/checkout", { method: "POST" }, true);
+}
+
+export async function getMyOrders(): Promise<Order[]> {
+  return request<Order[]>("/orders", {}, true);
+}
+
+// ---- Bewertungen ----
+
+export async function getMyReviews(): Promise<Review[]> {
+  return request<Review[]>("/reviews/me", {}, true);
+}
+
+export async function submitReview(payload: {
+  vendorId?: number;
+  productId?: number;
+  rating: number;
+  comment?: string;
+}): Promise<Review> {
+  return request<Review>(
+    "/reviews",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        vendor_id: payload.vendorId ?? null,
+        product_id: payload.productId ?? null,
+        rating: payload.rating,
+        comment: payload.comment ?? null,
+      }),
+    },
+    true
+  );
 }

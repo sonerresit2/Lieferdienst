@@ -15,15 +15,27 @@ export interface Product {
   category: string | null;
   is_available: boolean;
   images: ProductImage[];
+  avg_rating: number | null;
+  review_count: number;
 }
 
 export interface Vendor {
   id: number;
   name: string;
   description: string | null;
-  rating: string | null;
+  avg_rating: number | null;
+  review_count: number;
   delivery_fee: string;
   delivery_time_min: number | null;
+}
+
+export interface Review {
+  id: number;
+  vendor_id: number | null;
+  product_id: number | null;
+  order_id: number;
+  rating: number;
+  comment: string | null;
 }
 
 export interface User {
