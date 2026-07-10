@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { ProductCard } from '../../components/product-card/product-card';
@@ -23,46 +23,66 @@ import { forkJoin } from 'rxjs';
 })
 export class Home implements OnInit {
 
-  // Alle geladenen Produkte
+  // Vom Backend geladene Produkte
   products: Product[] = [];
 
-  // Alle verfügbaren Anbieter
+  // Für die Anzeige verwendete Produkte
+  filteredProducts: Product[] = [];
+
+  // Anbieter
   vendors: Vendor[] = [];
-
-  // Aktuell ausgewählter Anbieter
-  selectedVendor: number | null = null;
-
-  // Aktuell ausgewählte Kategorie
-  selectedCategory: string | null = null;
 
   constructor(
     private productService: ProductService,
-    private vendorService: VendorService
+    private vendorService: VendorService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   /**
-   * Wird beim Laden der Startseite ausgeführt.
-   * Lädt Produkte und Anbieter parallel vom Backend.
+   * Produkte und Anbieter laden
    */
   ngOnInit(): void {
+
+    console.log('HOME GELADEN');
 
     forkJoin([
       this.productService.getProducts(),
       this.vendorService.getVendors()
-    ])
-    .subscribe({
+    ]).subscribe({
 
       next: ([products, vendors]) => {
 
+        console.log('Produkte:', products);
+        console.log('Anbieter:', vendors);
+
         this.products = products;
+        this.filteredProducts = [...products];
         this.vendors = vendors;
+
+        this.cdr.detectChanges();
+
+        
+        console.log(
+          'Products State:',
+          this.products.length
+        );
+
+        console.log(
+          'Filtered State:',
+          this.filteredProducts.length
+        );
+
+        console.log(
+          'Vendor State:',
+          this.vendors.length
+        );
 
       },
 
       error: (error) => {
 
         console.error(
-          'Fehler beim Laden der Daten:',
+          'Fehler beim Laden:',
           error
         );
 
@@ -73,8 +93,7 @@ export class Home implements OnInit {
   }
 
   /**
-   * Erstellt automatisch eine Liste aller Kategorien,
-   * die in den Produkten vorhanden sind.
+   * Kategorien aus allen Produkten erzeugen
    */
   get categories(): string[] {
 
@@ -85,39 +104,6 @@ export class Home implements OnInit {
         )
       )
     ];
-
-  }
-
-  /**
-   * Filtert die Produkte abhängig
-   * vom ausgewählten Anbieter
-   * und der ausgewählten Kategorie.
-   */
-  get filteredProducts(): Product[] {
-
-    let filtered = this.products;
-
-    // Anbieterfilter
-    if (this.selectedVendor !== null) {
-
-      filtered = filtered.filter(
-        product =>
-          product.vendor_id === this.selectedVendor
-      );
-
-    }
-
-    // Kategoriefilter
-    if (this.selectedCategory !== null) {
-
-      filtered = filtered.filter(
-        product =>
-          product.category === this.selectedCategory
-      );
-
-    }
-
-    return filtered;
 
   }
 

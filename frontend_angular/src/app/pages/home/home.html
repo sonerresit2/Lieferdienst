@@ -1,93 +1,72 @@
-
 <div class="page">
 
+  <!-- Hero -->
+  <section class="hero">
 
-<!-- Hero-Bereich -->
+    <p class="hero-eyebrow">
+      LIEFERDIENST
+    </p>
 
-<section class="hero">
+    <h1 class="hero-title">
+      Weniger kochen.<br>
+      Mehr genießen.
+    </h1>
 
-  <p class="hero-eyebrow">
-    LIEFERDIENST
-  </p>
+    <p class="hero-subtitle">
+      Kuratierte Gerichte lokaler Anbieter,
+      geliefert in Minuten statt Stunden.
+    </p>
 
-  <h1 class="hero-title">
-    Weniger kochen.<br>
-    Mehr genießen.
-  </h1>
+  </section>
 
-  <p class="hero-subtitle">
-    Kuratierte Gerichte lokaler Anbieter,
-    geliefert in Minuten statt Stunden.
-  </p>
+  <h2>TEST</h2>
 
-</section>
+  <p>Produkte: {{ products.length }}</p>
+  <p>Gefiltert: {{ filteredProducts.length }}</p>
+  <p>Anbieter: {{ vendors.length }}</p>
 
-<!-- Anbieterfilter -->
+  <!-- Anbieter -->
+  <div class="vendor-scroll">
 
-<div class="vendor-scroll">
+    <button class="vendor-chip">
+      Alle
+    </button>
 
-  <button
-    class="vendor-chip"
-    [class.vendor-chip-active]="selectedVendor === null"
-    (click)="selectedVendor = null">
+    <button
+      *ngFor="let vendor of vendors"
+      class="vendor-chip">
 
-    Alle
+      {{ vendor.name }}
 
-  </button>
+    </button>
 
-  <button
-    *ngFor="let vendor of vendors"
-    class="vendor-chip"
-    [class.vendor-chip-active]="selectedVendor === vendor.id"
-    (click)="selectedVendor = vendor.id">
+  </div>
 
-    {{ vendor.name }}
+  <!-- Kategorien -->
+  <div class="cat-row">
 
-  </button>
+    <button class="cat-tab">
+      Alle
+    </button>
 
-</div>
+    <button
+      *ngFor="let category of categories"
+      class="cat-tab">
 
-<!-- Kategorien -->
+      {{ category }}
 
-<div class="cat-row">
+    </button>
 
-  <button
-    class="cat-tab"
-    [class.cat-tab-active]="selectedCategory === null"
-    (click)="selectedCategory = null">
+  </div>
 
-    Alle
+  <!-- Produkte -->
+  <div class="grid">
 
-  </button>
+    <app-product-card
+      *ngFor="let product of filteredProducts"
+      [product]="product">
+    </app-product-card>
 
-  <button
-    *ngFor="let category of categories"
-    class="cat-tab"
-    [class.cat-tab-active]="selectedCategory === category"
-    (click)="selectedCategory = category">
-
-    {{ category }}
-
-  </button>
-
-</div>
-
-<!-- Produktanzahl -->
-
-<p>
-  Produkte gefunden:
-  {{ filteredProducts.length }}
-</p>
-
-<!-- Produktraster -->
-
-<div class="grid">
-
-  <app-product-card
-    *ngFor="let product of filteredProducts"
-    [product]="product">
-  </app-product-card>
-
-</div>
+  </div>
 
 </div>
