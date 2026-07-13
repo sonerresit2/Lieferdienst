@@ -32,6 +32,9 @@ export class Home implements OnInit {
   // Anbieter
   vendors: Vendor[] = [];
 
+  // Aktuell ausgewählter Anbieter
+  selectedVendor: number | null = null;
+
   constructor(
     private productService: ProductService,
     private vendorService: VendorService,
@@ -61,7 +64,7 @@ export class Home implements OnInit {
 
         this.cdr.detectChanges();
 
-        
+
         console.log(
           'Products State:',
           this.products.length
@@ -106,5 +109,31 @@ export class Home implements OnInit {
     ];
 
   }
+
+/**
+ * Filtert Produkte nach Anbieter.
+ */
+filterByVendor(
+  vendorId: number | null
+): void {
+
+  this.selectedVendor = vendorId;
+
+  // Alle Produkte anzeigen
+  if (vendorId === null) {
+
+    this.filteredProducts = [...this.products];
+
+    return;
+
+  }
+
+  // Produkte eines Anbieters anzeigen
+  this.filteredProducts = this.products.filter(
+    product =>
+      product.vendor_id === vendorId
+  );
+
+}
 
 }

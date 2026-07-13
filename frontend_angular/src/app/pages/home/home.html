@@ -26,21 +26,28 @@
   <p>Anbieter: {{ vendors.length }}</p>
 
   <!-- Anbieter -->
-  <div class="vendor-scroll">
+ <div class="vendor-scroll">
 
-    <button class="vendor-chip">
-      Alle
-    </button>
+  <button
+    class="vendor-chip"
+    [class.vendor-chip-active]="selectedVendor === null"
+    (click)="filterByVendor(null)">
 
-    <button
-      *ngFor="let vendor of vendors"
-      class="vendor-chip">
+    Alle
 
-      {{ vendor.name }}
+  </button>
 
-    </button>
+  <button
+    *ngFor="let vendor of vendors"
+    class="vendor-chip"
+    [class.vendor-chip-active]="selectedVendor === vendor.id"
+    (click)="filterByVendor(vendor.id)">
 
-  </div>
+    {{ vendor.name }}
+
+  </button>
+
+</div>
 
   <!-- Kategorien -->
   <div class="cat-row">
