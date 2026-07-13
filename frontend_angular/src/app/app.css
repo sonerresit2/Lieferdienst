@@ -1,0 +1,36 @@
+.footer {
+
+  height: 80px;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  margin-top: 60px;
+
+  border-top: 1px solid #e5e7eb;
+
+  background: #f3f4f6;
+
+}
+
+:host-context(.dark) .footer {
+
+  background: #111827;
+
+  border-top: 1px solid #374151;
+
+}
+
+:host-context(.dark) .footer-item,
+:host-context(.dark) .footer-link {
+
+  color: #d1d5db;
+
+}
+
+:host-context(.dark) .footer-link:hover {
+
+  color: #ffffff;
+
+}

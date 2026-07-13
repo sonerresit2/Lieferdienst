@@ -19,3 +19,40 @@ body {
 
   transition: .2s;
 }
+
+.legal-page {
+
+  max-width: 900px;
+
+  margin: 40px auto;
+
+  padding: 0 20px;
+
+}
+
+.legal-page h1 {
+
+  margin-bottom: 20px;
+
+}
+
+.legal-page h2 {
+
+  margin-top: 40px;
+  margin-bottom: 10px;
+
+}
+
+.notice {
+
+  padding: 16px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 12px;
+
+  background: #f7f7f7;
+
+  margin-bottom: 30px;
+
+}

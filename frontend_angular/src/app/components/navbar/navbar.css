@@ -1,6 +1,6 @@
 .navbar {
 
-  height: 64px;
+  height: 80px;
 
   display: flex;
   justify-content: space-between;
@@ -8,7 +8,28 @@
 
   padding: 0 24px;
 
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #e5e7eb;
+
+  background: #f3f4f6;
+
+}
+
+.logo {
+
+  text-decoration: none;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  transition: .2s;
+
+}
+
+.logo:hover {
+
+  color: #0a84ff;
 
 }
 
@@ -17,19 +38,78 @@
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 16px;
 
 }
 
-.theme-toggle {
+.actions span {
 
-  border: none;
+  color: #374151;
 
-  border-radius: 999px;
+}
 
-  width: 42px;
-  height: 24px;
+.actions button {
+
+  background: transparent;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  padding: 8px 12px;
 
   cursor: pointer;
+
+  color: #374151;
+
+  transition: .2s;
+
+}
+
+.actions button:hover {
+
+  background: #e5e7eb;
+
+}
+
+/* ===== Dark Mode ===== */
+
+:host-context(.dark) .navbar {
+
+  background: #111827;
+
+  border-bottom: 1px solid #374151;
+
+}
+
+:host-context(.dark) .logo {
+
+  color: #ffffff;
+
+}
+
+:host-context(.dark) .logo:hover {
+
+  color: #60a5fa;
+
+}
+
+:host-context(.dark) .actions span {
+
+  color: #ffffff;
+
+}
+
+:host-context(.dark) .actions button {
+
+  color: #ffffff;
+
+  border-color: #4b5563;
+
+}
+
+:host-context(.dark) .actions button:hover {
+
+  background: #1f2937;
 
 }

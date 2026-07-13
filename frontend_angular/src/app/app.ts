@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 import { Navbar } from './components/navbar/navbar';
 
@@ -7,10 +7,10 @@ import { Navbar } from './components/navbar/navbar';
   selector: 'app-root',
   imports: [
     RouterOutlet,
+    RouterLink,
     Navbar
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
-}
+export class App {}
