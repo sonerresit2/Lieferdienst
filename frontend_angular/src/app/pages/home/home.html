@@ -52,19 +52,26 @@
   <!-- Kategorien -->
   <div class="cat-row">
 
-    <button class="cat-tab">
-      Alle
-    </button>
+  <button
+    class="cat-tab"
+    [class.cat-tab-active]="selectedCategory === null"
+    (click)="filterByCategory(null)">
 
-    <button
-      *ngFor="let category of categories"
-      class="cat-tab">
+    Alle
 
-      {{ category }}
+  </button>
 
-    </button>
+  <button
+    *ngFor="let category of categories"
+    class="cat-tab"
+    [class.cat-tab-active]="selectedCategory === category"
+    (click)="filterByCategory(category)">
 
-  </div>
+    {{ category }}
+
+  </button>
+
+</div>
 
   <!-- Produkte -->
   <div class="grid">

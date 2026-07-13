@@ -35,6 +35,9 @@ export class Home implements OnInit {
   // Aktuell ausgewählter Anbieter
   selectedVendor: number | null = null;
 
+  // Aktuell ausgewählte Kategorie
+  selectedCategory: string | null = null;
+
   constructor(
     private productService: ProductService,
     private vendorService: VendorService,
@@ -95,6 +98,37 @@ export class Home implements OnInit {
 
   }
 
+
+  /**
+ * Wendet alle aktiven Filter an.
+ */
+private applyFilters(): void {
+
+  let filtered = [...this.products];
+
+  // Anbieterfilter
+  if (this.selectedVendor !== null) {
+
+    filtered = filtered.filter(
+      product =>
+        product.vendor_id === this.selectedVendor
+    );
+
+  }
+
+  // Kategoriefilter
+  if (this.selectedCategory !== null) {
+
+    filtered = filtered.filter(
+      product =>
+        product.category === this.selectedCategory
+    );
+
+  }
+
+  this.filteredProducts = filtered;
+
+}
   /**
    * Kategorien aus allen Produkten erzeugen
    */
@@ -119,21 +153,20 @@ filterByVendor(
 
   this.selectedVendor = vendorId;
 
-  // Alle Produkte anzeigen
-  if (vendorId === null) {
-
-    this.filteredProducts = [...this.products];
-
-    return;
-
-  }
-
-  // Produkte eines Anbieters anzeigen
-  this.filteredProducts = this.products.filter(
-    product =>
-      product.vendor_id === vendorId
-  );
+  this.applyFilters();
 
 }
 
+/**
+ * Filtert Produkte nach Kategorie.
+ */
+filterByCategory(
+  category: string | null
+): void {
+
+  this.selectedCategory = category;
+
+  this.applyFilters();
+
+}
 }

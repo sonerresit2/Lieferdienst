@@ -127,7 +127,11 @@
 }
 
 .cat-tab-active {
+
   color: #111827;
-  border-bottom: 2px solid #111827;
+
   font-weight: 600;
+
+  border-bottom: 2px solid #111827;
+
 }
