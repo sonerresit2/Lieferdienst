@@ -134,7 +134,7 @@ try:
             ("Pizza Margherita", "Tomaten und Mozzarella", "8.90", "Hauptgericht", ["vegetarisch"]),
             ("Pizza Salami", "Mit italienischer Salami", "10.90", "Hauptgericht", []),
             ("Tiramisu", "Hausgemachtes Tiramisu", "4.90", "Nachtisch", ["vegetarisch"]),
-            ("Cola 0,5L", "Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Cola", "0,5 Liter Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
         
         doener_items = [
@@ -148,7 +148,7 @@ try:
             ("Cheeseburger", "Mit Cheddar", "9.90", "Hauptgericht", []),
             ("Chicken Burger", "Knuspriges Hähnchenfilet", "10.50", "Hauptgericht", []),
             ("Süßkartoffelpommes", "Mit Dip", "4.50", "Beilage", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
-            ("Sprite 0,5L", "Zitronenlimonade", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Sprite", "0,5 Liter Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         sushi_items = [
@@ -162,7 +162,7 @@ try:
             ("Fränkischer Braten", "Mit Kloß und Soße", "12.90", "Hauptgericht", []),
             ("Bratwürste", "Mit Sauerkraut", "9.90", "Hauptgericht", []),
             ("Kartoffelsalat", "Hausgemacht", "3.90", "Beilage", ["vegetarisch"]),
-            ("Apfelschorle", "0,5 Liter", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
+            ("Apfelschorle", "0,5 Liter Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]
 
         cafe_items = [
