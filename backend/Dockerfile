@@ -14,9 +14,12 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Anwendungscode kopieren
+
 COPY app ./app
+COPY tests ./tests
 COPY seed.py .
 COPY entrypoint.sh .
+
 
 # Windows fügt beim Kopieren oft CRLF-Zeilenenden ein, die ein Linux-Container
 # nicht als gültiges Shebang (#!/bin/sh) erkennt ("no such file or directory").
