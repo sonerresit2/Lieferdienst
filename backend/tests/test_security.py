@@ -8,7 +8,6 @@ from app.core.security import (
 
 def test_hash_password():
     password = "passwort123"
-
     hashed = hash_password(password)
 
     assert hashed != password
@@ -16,7 +15,6 @@ def test_hash_password():
 
 def test_verify_password_success():
     password = "passwort123"
-
     hashed = hash_password(password)
 
     assert verify_password(password, hashed)
@@ -24,7 +22,6 @@ def test_verify_password_success():
 
 def test_verify_password_wrong_password():
     password = "passwort123"
-
     hashed = hash_password(password)
 
     assert not verify_password("falschespasswort", hashed)
