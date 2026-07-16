@@ -146,7 +146,7 @@ try:
         ]
 
         burger_items = [
-            ("Cheeseburger", "Mit Cheddar", "9.90", "Hauptgericht", []),
+            ("Cheeseburger", "Saftiger Burger mit geschmolzenem Cheddar.", "9.90", "Hauptgericht", []),
             ("Chicken Burger", "Knuspriges Hähnchenfilet", "10.50", "Hauptgericht", []),
             ("Süßkartoffelpommes", "Mit Dip", "4.50", "Beilage", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
             ("Sprite", "0,5 Liter Erfrischungsgetränk", "2.90", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
@@ -154,7 +154,7 @@ try:
 
         sushi_items = [
             ("California Roll", "8 Stück", "8.90", "Hauptgericht", []),
-            ("Lachs Nigiri", "5 Stück", "7.90", "Hauptgericht", []),
+            ("Lachs Nigiri", "5 Stück Sushi-Reis mit frischem Lachs.", "7.90", "Hauptgericht", []),
             ("Edamame", "Gedämpfte Sojabohnen", "4.50", "Vorspeise", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
             ("Grüner Tee", "Heiß serviert", "2.80", "Getränk", ["vegan", "vegetarisch", "glutenfrei", "laktosefrei", "nussfrei"]),
         ]

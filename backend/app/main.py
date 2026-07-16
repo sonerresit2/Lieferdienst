@@ -4,11 +4,21 @@ from fastapi.staticfiles import StaticFiles
 
 from app.core.database import Base, engine
 from app.core.error_handlers import register_exception_handlers
-from app.routers import products, product_images, vendors, auth, cart, orders, reviews
+
+from app.routers import (
+    products,
+    product_images,
+    vendors,
+    auth,
+    cart,
+    orders,
+    reviews,
+    translation,
+)
 
 # Erstellt alle Tabellen aus den Models, falls sie noch nicht existieren.
 # Für ein Schulprojekt ausreichend; in größeren Projekten würde man hierfür
-# Alembic-Migrationen verwenden (im Repo bereits als Dependency vorbereitet).
+# Alembic-Migrationen verwenden.
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -19,10 +29,9 @@ app = FastAPI(
 
 register_exception_handlers(app)
 
-# CORS: erlaubt dem Frontend-Team, die API vom Browser aus anzusprechen.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Für die Schulprojekt-Umgebung offen; in Produktion einschränken.
+    allow_origins=["*"],  # In Produktion einschränken
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,6 +39,7 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
+# Router
 app.include_router(auth.router)
 app.include_router(vendors.router)
 app.include_router(products.router)
@@ -37,13 +47,18 @@ app.include_router(product_images.router)
 app.include_router(cart.router)
 app.include_router(orders.router)
 app.include_router(reviews.router)
-
+app.include_router(translation.router)
 
 @app.get("/", tags=["Status"])
 def root():
-    return {"status": "ok", "service": "Lieferdienst API"}
+    return {
+        "status": "ok",
+        "service": "Lieferdienst API"
+    }
 
 
 @app.get("/health", tags=["Status"])
 def health_check():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy"
+    }
