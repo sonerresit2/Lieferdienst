@@ -81,6 +81,7 @@
   border: 2px solid rgba(29,29,31,0.92);
 }
 
+
 @media (max-width: 600px) {
   .inner { padding: 0 16px; }
   .greeting { display: none; }

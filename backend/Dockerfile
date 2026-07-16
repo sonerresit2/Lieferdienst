@@ -15,6 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Anwendungscode kopieren
 
+COPY .env .
+
 COPY app ./app
 COPY tests ./tests
 COPY seed.py .
