@@ -97,6 +97,7 @@ try:
             User(email="tom@lieferdienst.de",   password_hash=hash_password("passwort123"), full_name="Tom Mustermann", role="customer"),
             User(email="soner@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Soner Yilmaz",   role="customer"),
             User(email="thomas@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Thomas Laukard",   role="customer"),
+            User(email="gerhardt@lieferdienst.de", password_hash=hash_password("passwort123"), full_name="Gerhardt Maurer", role="customer"),
 
         ]
         db.add_all(users)
