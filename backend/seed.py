@@ -203,7 +203,7 @@ try:
         # Ohne das könnten Anbieter/Produkte direkt nach dem Seed nicht bewertet
         # werden (Bewerten setzt eine eigene Bestellung voraus) und die Sterne
         # wären in der Präsentation überall leer.
-        tom, soner, thomas = users
+        tom, soner, thomas, gerhardt= users
 
         def make_order(user, vendor, items):
             """items: Liste von (Product, quantity)-Tupeln, alle vom selben vendor."""
